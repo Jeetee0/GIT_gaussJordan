@@ -15,13 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Gauss Jordan-Parallel.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="Gauss Jordan-Sequentiell.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="Gauss Jordan-Sequentiell_orig.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gauss Jordan-AVX.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gauss Jordan-AVX_clean.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

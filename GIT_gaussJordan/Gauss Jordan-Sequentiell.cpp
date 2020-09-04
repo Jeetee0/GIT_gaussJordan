@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N       3		// Groesse der N*N Matrix
+#define N       15		// Groesse der N*N Matrix
 #define DEBUG	true		// um Matrizen anzeigen zu lassen
 #define EPSILON 1e-20
 #define FALSE   0
