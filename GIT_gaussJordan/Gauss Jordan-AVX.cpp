@@ -12,7 +12,7 @@
 #include <immintrin.h>
 
 
-#define N       6000			// size of N*N matrix
+#define N       3000			// size of N*N matrix
 #define DEBUG	false			// print matrixes (only suggested for small N)
 
 #define INTRINSICS true

@@ -12,8 +12,11 @@
 #include <immintrin.h>
 
 
-#define N       6000			// size of N*N matrix
+#define N       3000			// size of N*N matrix
 #define DEBUG	false			// print matrixes (only suggested for small N)
+
+#define OPENMP	false			// toggle openMP parallelisation
+#define THREADS 8				// number of threads for openMP
 
 #define FALSE   0
 #define TRUE    1
@@ -56,6 +59,7 @@ p_mrow_t gauss_jordan_elimination(p_mrow_t matrix, float* results) {
 	int k, i, j;
 	int increment = 8;
 	for (k = 0; k < N; k++) {
+		//#pragma omp parallel for private(i, j) num_threads(THREADS) if (OPENMP)
 		for (i = 0; i < N; i++) {
 			for (j = k; j <= N;) {
 				if (i != k) {

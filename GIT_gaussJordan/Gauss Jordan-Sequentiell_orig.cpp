@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N       1000     //groesse der N*N Matrix
+#define N       3000     //groesse der N*N Matrix
 #define EPSILON 1e-20
 #define FALSE   0
 #define TRUE    1
@@ -147,10 +147,10 @@ int main (int argc, char **argv)
     duration = (double)(finish - start) / CLOCKS_PER_SEC;
     printf( "%2.3f seconds\n", duration );  //Zeitdauer ausgeben
 
-    if (solution == TRUE)
-        print_results (a);
-    else
-        printf ("No solution\n");
-   
+    //if (solution == TRUE)
+    //    print_results (a);
+    //else
+    //    printf ("No solution\n");
+    //
     return (0);
 }

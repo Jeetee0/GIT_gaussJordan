@@ -27,5 +27,8 @@
     <ClCompile Include="Gauss Jordan-AVX_clean.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Gauss Jordan-Sequentiell-AVX.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
