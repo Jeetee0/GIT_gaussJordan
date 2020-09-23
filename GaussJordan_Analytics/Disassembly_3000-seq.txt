@@ -1,0 +1,264 @@
+0064173F  int         3  
+00641740  int         3  
+00641741  int         3  
+00641742  int         3  
+00641743  int         3  
+00641744  int         3  
+00641745  int         3  
+00641746  int         3  
+00641747  int         3  
+00641748  int         3  
+00641749  int         3  
+0064174A  int         3  
+0064174B  int         3  
+0064174C  int         3  
+0064174D  int         3  
+0064174E  int         3  
+0064174F  int         3  
+00641750  int         3  
+00641751  int         3  
+00641752  int         3  
+00641753  int         3  
+00641754  int         3  
+00641755  int         3  
+00641756  int         3  
+00641757  int         3  
+00641758  int         3  
+00641759  int         3  
+0064175A  int         3  
+0064175B  int         3  
+0064175C  int         3  
+0064175D  int         3  
+0064175E  int         3  
+0064175F  int         3  
+--- E:\Development\GIT_gaussJordan\GIT_gaussJordan\Gauss Jordan-Sequentiell.cpp 
+
+// Gauss-Jordan-Eliminations-Funktion zu Loesung eines linearen Gleichungssystems
+// Parameter: m - Zeiger auf Matrix
+// Loesungsvektor in m[i][N]
+int gauss_jordan_elimination(p_mrow_t m)
+{
+00641760  push        ebp  
+00641761  mov         ebp,esp  
+00641763  sub         esp,164h  
+00641769  push        ebx  
+0064176A  push        esi  
+0064176B  push        edi  
+0064176C  lea         edi,[ebp-164h]  
+00641772  mov         ecx,59h  
+00641777  mov         eax,0CCCCCCCCh  
+0064177C  rep stos    dword ptr es:[edi]  
+0064177E  mov         byte ptr [ebp-155h],0  
+00641785  mov         ecx,offset _01C44D47_Gauss Jordan-Sequentiell@cpp (064C007h)  
+0064178A  call        @__CheckForDebuggerJustMyCode@4 (064123Ah)  
+	int startrow, lastrow, nrow;
+	float* pivotrow;
+	float* resultsvector;
+	int* pivotp, * marked;
+	int i, j, k, picked;
+	float tmp;
+
+
+	/* rows of matrix I have to process */
+	startrow = 0;
+0064178F  mov         dword ptr [startrow],0  
+	lastrow = N;
+00641796  mov         dword ptr [lastrow],14h  
+	nrow = N;
+0064179D  mov         dword ptr [nrow],14h  
+
+	//dynamische Speicherallokierung
+	//Pivotrow: Reihe um naechste Reduzierung der Matrix durchzufuehren
+	pivotrow = (float*)malloc((N + 1) * sizeof(float));
+006417A4  mov         esi,esp  
+006417A6  push        54h  
+006417A8  call        dword ptr [__imp__malloc (064B17Ch)]  
+006417AE  add         esp,4  
+006417B1  cmp         esi,esp  
+006417B3  call        __RTC_CheckEsp (0641244h)  
+006417B8  mov         dword ptr [pivotrow],eax  
+
+	resultsvector = (float*)malloc(N * sizeof(float));
+006417BB  mov         esi,esp  
+006417BD  push        50h  
+006417BF  call        dword ptr [__imp__malloc (064B17Ch)]  
+006417C5  add         esp,4  
+006417C8  cmp         esi,esp  
+006417CA  call        __RTC_CheckEsp (0641244h)  
+006417CF  mov         dword ptr [resultsvector],eax  
+
+	//pivotp: Speichert welche Spalte mit der Pivotreihe reduziert wurde
+	pivotp = (int*)malloc(N * sizeof(int));
+006417D2  mov         esi,esp  
+006417D4  push        50h  
+006417D6  call        dword ptr [__imp__malloc (064B17Ch)]  
+006417DC  add         esp,4  
+006417DF  cmp         esi,esp  
+006417E1  call        __RTC_CheckEsp (0641244h)  
+006417E6  mov         dword ptr [pivotp],eax  
+	//marked: Speichert welche Reihe schon fuer die Reduzierung benutzt wurde (keine Reihe doppelt)
+	marked = (int*)malloc(nrow * sizeof(int));
+006417E9  xor         ecx,ecx  
+006417EB  mov         eax,dword ptr [nrow]  
+006417EE  mov         edx,4  
+006417F3  mul         eax,edx  
+006417F5  seto        cl  
+006417F8  neg         ecx  
+006417FA  or          ecx,eax  
+006417FC  mov         esi,esp  
+006417FE  push        ecx  
+006417FF  call        dword ptr [__imp__malloc (064B17Ch)]  
+00641805  add         esp,4  
+00641808  cmp         esi,esp  
+0064180A  call        __RTC_CheckEsp (0641244h)  
+0064180F  mov         dword ptr [marked],eax  
+
+	for (i = 0; i < nrow; i++)
+00641812  mov         dword ptr [i],0  
+00641819  jmp         gauss_jordan_elimination+0C4h (0641824h)  
+0064181B  mov         eax,dword ptr [i]  
+0064181E  add         eax,1  
+00641821  mov         dword ptr [i],eax  
+00641824  mov         eax,dword ptr [i]  
+00641827  cmp         eax,dword ptr [nrow]  
+0064182A  jge         gauss_jordan_elimination+0DBh (064183Bh)  
+		marked[i] = 0;
+0064182C  mov         eax,dword ptr [i]  
+0064182F  mov         ecx,dword ptr [marked]  
+00641832  mov         dword ptr [ecx+eax*4],0  
+00641839  jmp         gauss_jordan_elimination+0BBh (064181Bh)  
+
+	for (i = 0; i < N; i++) {     // Spaltenzaehler
+0064183B  mov         dword ptr [i],0  
+00641842  jmp         gauss_jordan_elimination+0EDh (064184Dh)  
+00641844  mov         eax,dword ptr [i]  
+00641847  add         eax,1  
+0064184A  mov         dword ptr [i],eax  
+0064184D  cmp         dword ptr [i],14h  
+00641851  jge         gauss_jordan_elimination+351h (0641AB1h)  
+		//Finde Maximum von der aktuellen Spalte
+		tmp = 0.0;
+00641857  xorps       xmm0,xmm0  
+0064185A  movss       dword ptr [tmp],xmm0  
+		for (j = 0; j < nrow; j++) {	// Zeilenzaehler
+00641862  mov         dword ptr [j],0  
+00641869  jmp         gauss_jordan_elimination+114h (0641874h)  
+0064186B  mov         eax,dword ptr [j]  
+0064186E  add         eax,1  
+00641871  mov         dword ptr [j],eax  
+00641874  mov         eax,dword ptr [j]  
+00641877  cmp         eax,dword ptr [nrow]  
+0064187A  jge         gauss_jordan_elimination+19Ah (06418FAh)  
+
+			//Wurde Reihe noch nicht als Pivotreihe verwendet und ist der aktuelle Wert der groesste
+			if (!marked[j] && (fabs(m[j][i]) > tmp)) {
+0064187C  mov         eax,dword ptr [j]  
+0064187F  mov         ecx,dword ptr [marked]  
+00641882  cmp         dword ptr [ecx+eax*4],0  
+00641886  jne         gauss_jordan_elimination+195h (06418F5h)  
+00641888  imul        eax,dword ptr [j],54h  
+0064188C  add         eax,dword ptr [m]  
+0064188F  mov         ecx,dword ptr [i]  
+00641892  cvtss2sd    xmm0,dword ptr [eax+ecx*4]  
+00641897  sub         esp,8  
+0064189A  movsd       mmword ptr [esp],xmm0  
+0064189F  call        _fabs (064112Ch)  
+006418A4  add         esp,8  
+006418A7  fstp        qword ptr [ebp-164h]  
+006418AD  movsd       xmm0,mmword ptr [ebp-164h]  
+006418B5  cvtss2sd    xmm1,dword ptr [tmp]  
+006418BD  comisd      xmm0,xmm1  
+006418C1  jbe         gauss_jordan_elimination+195h (06418F5h)  
+				tmp = fabs(m[j][i]);   //Speichere Betrag als Maximalwert
+006418C3  imul        eax,dword ptr [j],54h  
+006418C7  add         eax,dword ptr [m]  
+006418CA  mov         ecx,dword ptr [i]  
+006418CD  cvtss2sd    xmm0,dword ptr [eax+ecx*4]  
+006418D2  sub         esp,8  
+006418D5  movsd       mmword ptr [esp],xmm0  
+006418DA  call        _fabs (064112Ch)  
+006418DF  add         esp,8  
+006418E2  fstp        dword ptr [tmp]  
+				picked = j;             //Speicher aus welcher Reihe der Max-Wert ist
+006418E8  mov         byte ptr [ebp-155h],1  
+006418EF  mov         eax,dword ptr [j]  
+006418F2  mov         dword ptr [picked],eax  
+			}
+		}
+006418F5  jmp         gauss_jordan_elimination+10Bh (064186Bh)  
+
+		marked[picked] = 1;     //Markieren, dass die Reihe mit dem Maximal Element als Pivotreihe benutzt wird
+006418FA  cmp         byte ptr [ebp-155h],0  
+00641901  jne         gauss_jordan_elimination+1B0h (0641910h)  
+00641903  push        641BF0h  
+00641908  call        __RTC_UninitUse (0641096h)  
+0064190D  add         esp,4  
+00641910  mov         eax,dword ptr [picked]  
+00641913  mov         ecx,dword ptr [marked]  
+00641916  mov         dword ptr [ecx+eax*4],1  
+		pivotp[picked] = i;     //Mit dieser Reihe, wird Spalte i reduziert
+0064191D  cmp         byte ptr [ebp-155h],0  
+00641924  jne         gauss_jordan_elimination+1D3h (0641933h)  
+00641926  push        641BF0h  
+0064192B  call        __RTC_UninitUse (0641096h)  
+00641930  add         esp,4  
+00641933  mov         eax,dword ptr [picked]  
+00641936  mov         ecx,dword ptr [pivotp]  
+00641939  mov         edx,dword ptr [i]  
+0064193C  mov         dword ptr [ecx+eax*4],edx  
+
+		//Pivotreihe laden
+		for (j = 0; j < N + 1; j++)
+0064193F  mov         dword ptr [j],0  
+00641946  jmp         gauss_jordan_elimination+1F1h (0641951h)  
+00641948  mov         eax,dword ptr [j]  
+0064194B  add         eax,1  
+0064194E  mov         dword ptr [j],eax  
+00641951  cmp         dword ptr [j],15h  
+00641955  jge         gauss_jordan_elimination+225h (0641985h)  
+			pivotrow[j] = m[picked][j];
+00641957  cmp         byte ptr [ebp-155h],0  
+0064195E  jne         gauss_jordan_elimination+20Dh (064196Dh)  
+00641960  push        641BF0h  
+00641965  call        __RTC_UninitUse (0641096h)  
+0064196A  add         esp,4  
+0064196D  imul        eax,dword ptr [picked],54h  
+00641971  add         eax,dword ptr [m]  
+00641974  mov         ecx,dword ptr [j]  
+00641977  mov         edx,dword ptr [pivotrow]  
+0064197A  mov         esi,dword ptr [j]  
+0064197D  mov         eax,dword ptr [eax+esi*4]  
+00641980  mov         dword ptr [edx+ecx*4],eax  
+00641983  jmp         gauss_jordan_elimination+1E8h (0641948h)  
+
+		//Groesse der Pivotelemente ueberpruefen
+		if (fabs(pivotrow[i]) < EPSILON) {       //Wenn Elemente zu klein dann keine Berechnung moeglich
+00641985  mov         eax,dword ptr [i]  
+00641988  mov         ecx,dword ptr [pivotrow]  
+0064198B  cvtss2sd    xmm0,dword ptr [ecx+eax*4]  
+00641990  sub         esp,8  
+00641993  movsd       mmword ptr [esp],xmm0  
+00641998  call        _fabs (064112Ch)  
+0064199D  add         esp,8  
+006419A0  fstp        qword ptr [ebp-164h]  
+006419A6  movsd       xmm0,mmword ptr [__real@3bc79ca10c924223 (0647CD8h)]  
+006419AE  comisd      xmm0,mmword ptr [ebp-164h]  
+006419B6  jbe         gauss_jordan_elimination+270h (06419D0h)  
+			printf("Exits on iteration %d\n", i);
+006419B8  mov         eax,dword ptr [i]  
+006419BB  push        eax  
+006419BC  push        offset string "Exits on iteration %d\n" (0647B7Ch)  
+006419C1  call        _printf (064104Bh)  
+006419C6  add         esp,8  
+			return (FALSE);
+006419C9  xor         eax,eax  
+006419CB  jmp         gauss_jordan_elimination+47Ch (0641BDCh)  
+		}
+
+		//Reduziere alle Reihen mit der Pivotreihe
+		//#pragma omp parallel for private(j, k) num_threads(THREADS) if (OPENMP)
+		for (j = 0; j < nrow; j++) {
+006419D0  mov         dword ptr [j],0  
+006419D7  jmp         gauss_jordan_elimination+282h (06419E2h)  
+006419D9  mov         eax,dword ptr [j]  
+006419DC  add         eax,1  
