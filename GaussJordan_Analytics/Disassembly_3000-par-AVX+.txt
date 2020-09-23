@@ -1,0 +1,327 @@
+0035191D  call        __RTC_CheckEsp (0351299h)  
+00351922  mov         esp,ebp  
+00351924  pop         ebp  
+00351925  ret  
+--- No source file -------------------------------------------------------------
+00351926  int         3  
+00351927  int         3  
+00351928  int         3  
+00351929  int         3  
+0035192A  int         3  
+0035192B  int         3  
+0035192C  int         3  
+0035192D  int         3  
+0035192E  int         3  
+0035192F  int         3  
+00351930  int         3  
+00351931  int         3  
+00351932  int         3  
+00351933  int         3  
+00351934  int         3  
+00351935  int         3  
+00351936  int         3  
+00351937  int         3  
+00351938  int         3  
+00351939  int         3  
+0035193A  int         3  
+0035193B  int         3  
+0035193C  int         3  
+0035193D  int         3  
+0035193E  int         3  
+0035193F  int         3  
+00351940  int         3  
+00351941  int         3  
+00351942  int         3  
+00351943  int         3  
+00351944  int         3  
+00351945  int         3  
+00351946  int         3  
+00351947  int         3  
+00351948  int         3  
+00351949  int         3  
+0035194A  int         3  
+0035194B  int         3  
+0035194C  int         3  
+0035194D  int         3  
+0035194E  int         3  
+0035194F  int         3  
+--- E:\Development\GIT_gaussJordan\GIT_gaussJordan\Gauss Jordan-AVX_clean.cpp --
+
+p_mrow_t gauss_jordan_elimination(p_mrow_t matrix, float* results) {
+00351950  push        ebx  
+00351951  mov         ebx,esp  
+00351953  sub         esp,8  
+00351956  and         esp,0FFFFFFE0h  
+00351959  add         esp,4  
+0035195C  push        ebp  
+0035195D  mov         ebp,dword ptr [ebx+4]  
+00351960  mov         dword ptr [esp+4],ebp  
+00351964  mov         ebp,esp  
+00351966  sub         esp,578h  
+0035196C  push        esi  
+0035196D  push        edi  
+0035196E  lea         edi,[ebp-578h]  
+00351974  mov         ecx,15Eh  
+00351979  mov         eax,0CCCCCCCCh  
+0035197E  rep stos    dword ptr es:[edi]  
+00351980  mov         ecx,offset _055236F3_Gauss Jordan-AVX_clean@cpp (035D021h)  
+00351985  call        @__CheckForDebuggerJustMyCode@4 (035128Fh)  
+
+	// init resulting matrix, which will be unit matrix in the end
+	p_mrow_t matrix_intr;
+	matrix_intr = (p_mrow_t)malloc(N * sizeof(mrow_t));
+0035198A  mov         esi,esp  
+0035198C  push        2257FE0h  
+00351991  call        dword ptr [__imp__malloc (035C194h)]  
+00351997  add         esp,4  
+0035199A  cmp         esi,esp  
+0035199C  call        __RTC_CheckEsp (0351299h)  
+003519A1  mov         dword ptr [matrix_intr],eax  
+	copy_matrix(matrix, matrix_intr);
+003519A4  mov         eax,dword ptr [matrix_intr]  
+003519A7  push        eax  
+003519A8  mov         ecx,dword ptr [matrix]  
+003519AB  push        ecx  
+003519AC  call        copy_matrix (0351451h)  
+003519B1  add         esp,8  
+
+	int k, i, j;
+	int increment = 8;
+003519B4  mov         dword ptr [increment],8  
+	for (k = 0; k < N; k++) {
+003519BB  mov         dword ptr [k],0  
+003519C2  jmp         gauss_jordan_elimination+7Dh (03519CDh)  
+003519C4  mov         eax,dword ptr [k]  
+003519C7  add         eax,1  
+003519CA  mov         dword ptr [k],eax  
+003519CD  cmp         dword ptr [k],0BB8h  
+003519D4  jge         gauss_jordan_elimination+4C5h (0351E15h)  
+		//#pragma omp parallel for private(i, j) num_threads(THREADS) if (OPENMP)
+		for (i = 0; i < N; i++) {
+003519DA  mov         dword ptr [i],0  
+003519E1  jmp         gauss_jordan_elimination+9Ch (03519ECh)  
+003519E3  mov         eax,dword ptr [i]  
+003519E6  add         eax,1  
+003519E9  mov         dword ptr [i],eax  
+003519EC  cmp         dword ptr [i],0BB8h  
+003519F3  jge         gauss_jordan_elimination+4C0h (0351E10h)  
+			for (j = k; j <= N;) {
+003519F9  mov         eax,dword ptr [k]  
+003519FC  mov         dword ptr [j],eax  
+003519FF  cmp         dword ptr [j],0BB8h  
+00351A06  jg          gauss_jordan_elimination+4BBh (0351E0Bh)  
+				if (i != k) {
+00351A0C  mov         eax,dword ptr [i]  
+00351A0F  cmp         eax,dword ptr [k]  
+00351A12  je          gauss_jordan_elimination+495h (0351DE5h)  
+					if ((j + increment) > (N + 1)) {
+00351A18  mov         eax,dword ptr [j]  
+00351A1B  add         eax,dword ptr [increment]  
+00351A1E  cmp         eax,0BB9h  
+00351A23  jle         gauss_jordan_elimination+14Bh (0351A9Bh)  
+						float tmp = matrix[i][k] / matrix[k][k];
+00351A25  imul        eax,dword ptr [i],2EE4h  
+00351A2C  add         eax,dword ptr [matrix]  
+00351A2F  imul        ecx,dword ptr [k],2EE4h  
+00351A36  add         ecx,dword ptr [matrix]  
+00351A39  mov         edx,dword ptr [k]  
+00351A3C  mov         esi,dword ptr [k]  
+00351A3F  movss       xmm0,dword ptr [eax+edx*4]  
+00351A44  divss       xmm0,dword ptr [ecx+esi*4]  
+00351A49  movss       dword ptr [ebp-44h],xmm0  
+						matrix_intr[i][j] = matrix[i][j] - tmp * matrix[k][j];
+00351A4E  imul        eax,dword ptr [i],2EE4h  
+00351A55  add         eax,dword ptr [matrix]  
+00351A58  imul        ecx,dword ptr [k],2EE4h  
+00351A5F  add         ecx,dword ptr [matrix]  
+00351A62  mov         edx,dword ptr [j]  
+00351A65  movss       xmm0,dword ptr [ebp-44h]  
+00351A6A  mulss       xmm0,dword ptr [ecx+edx*4]  
+00351A6F  mov         ecx,dword ptr [j]  
+00351A72  movss       xmm1,dword ptr [eax+ecx*4]  
+00351A77  subss       xmm1,xmm0  
+00351A7B  imul        edx,dword ptr [i],2EE4h  
+00351A82  add         edx,dword ptr [matrix_intr]  
+00351A85  mov         eax,dword ptr [j]  
+00351A88  movss       dword ptr [edx+eax*4],xmm1  
+						j++;
+00351A8D  mov         eax,dword ptr [j]  
+00351A90  add         eax,1  
+00351A93  mov         dword ptr [j],eax  
+					}
+00351A96  jmp         gauss_jordan_elimination+493h (0351DE3h)  
+					else {
+						// using formula: matrix_intr[i][j] = matrix[i][j] - tmp * matrix[k][j];
+						float tmp = matrix[i][k] / matrix[k][k];
+00351A9B  imul        eax,dword ptr [i],2EE4h  
+00351AA2  add         eax,dword ptr [matrix]  
+00351AA5  imul        ecx,dword ptr [k],2EE4h  
+00351AAC  add         ecx,dword ptr [matrix]  
+00351AAF  mov         edx,dword ptr [k]  
+00351AB2  mov         esi,dword ptr [k]  
+00351AB5  movss       xmm0,dword ptr [eax+edx*4]  
+00351ABA  divss       xmm0,dword ptr [ecx+esi*4]  
+00351ABF  movss       dword ptr [ebp-50h],xmm0  
+						__m256 kj = _mm256_setr_ps(matrix[k][j], matrix[k][j + 1], matrix[k][j + 2], matrix[k][j + 3], matrix[k][j + 4], matrix[k][j + 5], matrix[k][j + 6], matrix[k][j + 7]);
+00351AC4  imul        eax,dword ptr [k],2EE4h  
+00351ACB  add         eax,dword ptr [matrix]  
+00351ACE  mov         ecx,dword ptr [j]  
+00351AD1  imul        edx,dword ptr [k],2EE4h  
+00351AD8  add         edx,dword ptr [matrix]  
+00351ADB  mov         esi,dword ptr [j]  
+00351ADE  imul        edi,dword ptr [k],2EE4h  
+00351AE5  add         edi,dword ptr [matrix]  
+00351AE8  mov         dword ptr [ebp-548h],eax  
+00351AEE  mov         eax,dword ptr [j]  
+00351AF1  mov         dword ptr [ebp-54Ch],ecx  
+00351AF7  imul        ecx,dword ptr [k],2EE4h  
+00351AFE  add         ecx,dword ptr [matrix]  
+00351B01  mov         dword ptr [ebp-550h],edx  
+00351B07  mov         edx,dword ptr [j]  
+00351B0A  mov         dword ptr [ebp-554h],esi  
+00351B10  imul        esi,dword ptr [k],2EE4h  
+00351B17  add         esi,dword ptr [matrix]  
+00351B1A  mov         dword ptr [ebp-558h],eax  
+00351B20  mov         eax,dword ptr [j]  
+00351B23  mov         dword ptr [ebp-55Ch],edi  
+00351B29  imul        edi,dword ptr [k],2EE4h  
+00351B30  add         edi,dword ptr [matrix]  
+00351B33  mov         dword ptr [ebp-560h],ecx  
+00351B39  mov         ecx,dword ptr [j]  
+00351B3C  mov         dword ptr [ebp-564h],edx  
+00351B42  imul        edx,dword ptr [k],2EE4h  
+00351B49  add         edx,dword ptr [matrix]  
+00351B4C  mov         dword ptr [ebp-568h],eax  
+00351B52  mov         eax,dword ptr [j]  
+00351B55  mov         dword ptr [ebp-56Ch],esi  
+00351B5B  imul        esi,dword ptr [k],2EE4h  
+00351B62  add         esi,dword ptr [matrix]  
+00351B65  mov         dword ptr [ebp-570h],ecx  
+00351B6B  mov         ecx,dword ptr [j]  
+00351B6E  vmovss      xmm0,dword ptr [esi+ecx*4]  
+00351B73  vinsertps   xmm0,xmm0,dword ptr [edx+eax*4+4],10h  
+00351B7B  mov         eax,dword ptr [ebp-570h]  
+00351B81  vinsertps   xmm0,xmm0,dword ptr [edi+eax*4+8],20h  
+00351B89  mov         ecx,dword ptr [ebp-568h]  
+00351B8F  mov         edx,dword ptr [ebp-56Ch]  
+00351B95  vinsertps   xmm0,xmm0,dword ptr [edx+ecx*4+0Ch],30h  
+00351B9D  mov         eax,dword ptr [ebp-560h]  
+00351BA3  mov         ecx,dword ptr [ebp-564h]  
+00351BA9  vmovss      xmm1,dword ptr [eax+ecx*4+10h]  
+00351BAF  mov         edx,dword ptr [ebp-558h]  
+00351BB5  mov         eax,dword ptr [ebp-55Ch]  
+00351BBB  vinsertps   xmm1,xmm1,dword ptr [eax+edx*4+14h],10h  
+00351BC3  mov         ecx,dword ptr [ebp-550h]  
+00351BC9  mov         edx,dword ptr [ebp-554h]  
+00351BCF  vinsertps   xmm1,xmm1,dword ptr [ecx+edx*4+18h],20h  
+00351BD7  mov         eax,dword ptr [ebp-548h]  
+00351BDD  mov         ecx,dword ptr [ebp-54Ch]  
+00351BE3  vinsertps   xmm1,xmm1,dword ptr [eax+ecx*4+1Ch],30h  
+00351BEB  vinsertf128 ymm0,ymm0,xmm1,1  
+00351BF1  vmovups     ymmword ptr [ebp-380h],ymm0  
+00351BF9  vmovups     ymm0,ymmword ptr [ebp-380h]  
+00351C01  vmovups     ymmword ptr [ebp-80h],ymm0  
+						__m256 tmp8 = _mm256_setr_ps(tmp, tmp, tmp, tmp, tmp, tmp, tmp, tmp);
+00351C06  movss       xmm0,dword ptr [ebp-50h]  
+00351C0B  vshufps     xmm0,xmm0,xmm0,0  
+00351C10  vinsertf128 ymm0,ymm0,xmm0,1  
+00351C16  vmovups     ymmword ptr [ebp-3C0h],ymm0  
+00351C1E  vmovups     ymm0,ymmword ptr [ebp-3C0h]  
+00351C26  vmovups     ymmword ptr [ebp-0C0h],ymm0  
+						__m256 ij = _mm256_setr_ps(matrix[i][j], matrix[i][j + 1], matrix[i][j + 2], matrix[i][j + 3], matrix[i][j + 4], matrix[i][j + 5], matrix[i][j + 6], matrix[i][j + 7]);
+00351C2E  imul        eax,dword ptr [i],2EE4h  
+00351C35  add         eax,dword ptr [matrix]  
+00351C38  mov         ecx,dword ptr [j]  
+00351C3B  imul        edx,dword ptr [i],2EE4h  
+00351C42  add         edx,dword ptr [matrix]  
+00351C45  mov         esi,dword ptr [j]  
+00351C48  imul        edi,dword ptr [i],2EE4h  
+00351C4F  add         edi,dword ptr [matrix]  
+00351C52  mov         dword ptr [ebp-548h],eax  
+00351C58  mov         eax,dword ptr [j]  
+00351C5B  mov         dword ptr [ebp-54Ch],ecx  
+00351C61  imul        ecx,dword ptr [i],2EE4h  
+00351C68  add         ecx,dword ptr [matrix]  
+00351C6B  mov         dword ptr [ebp-550h],edx  
+00351C71  mov         edx,dword ptr [j]  
+00351C74  mov         dword ptr [ebp-554h],esi  
+00351C7A  imul        esi,dword ptr [i],2EE4h  
+00351C81  add         esi,dword ptr [matrix]  
+00351C84  mov         dword ptr [ebp-558h],eax  
+00351C8A  mov         eax,dword ptr [j]  
+00351C8D  mov         dword ptr [ebp-55Ch],edi  
+00351C93  imul        edi,dword ptr [i],2EE4h  
+00351C9A  add         edi,dword ptr [matrix]  
+00351C9D  mov         dword ptr [ebp-560h],ecx  
+00351CA3  mov         ecx,dword ptr [j]  
+00351CA6  mov         dword ptr [ebp-564h],edx  
+00351CAC  imul        edx,dword ptr [i],2EE4h  
+00351CB3  add         edx,dword ptr [matrix]  
+00351CB6  mov         dword ptr [ebp-568h],eax  
+00351CBC  mov         eax,dword ptr [j]  
+00351CBF  mov         dword ptr [ebp-56Ch],esi  
+00351CC5  imul        esi,dword ptr [i],2EE4h  
+00351CCC  add         esi,dword ptr [matrix]  
+00351CCF  mov         dword ptr [ebp-570h],ecx  
+00351CD5  mov         ecx,dword ptr [j]  
+00351CD8  vmovss      xmm0,dword ptr [esi+ecx*4]  
+00351CDD  vinsertps   xmm0,xmm0,dword ptr [edx+eax*4+4],10h  
+00351CE5  mov         eax,dword ptr [ebp-570h]  
+00351CEB  vinsertps   xmm0,xmm0,dword ptr [edi+eax*4+8],20h  
+00351CF3  mov         ecx,dword ptr [ebp-568h]  
+00351CF9  mov         edx,dword ptr [ebp-56Ch]  
+00351CFF  vinsertps   xmm0,xmm0,dword ptr [edx+ecx*4+0Ch],30h  
+00351D07  mov         eax,dword ptr [ebp-560h]  
+00351D0D  mov         ecx,dword ptr [ebp-564h]  
+00351D13  vmovss      xmm1,dword ptr [eax+ecx*4+10h]  
+00351D19  mov         edx,dword ptr [ebp-558h]  
+00351D1F  mov         eax,dword ptr [ebp-55Ch]  
+00351D25  vinsertps   xmm1,xmm1,dword ptr [eax+edx*4+14h],10h  
+00351D2D  mov         ecx,dword ptr [ebp-550h]  
+00351D33  mov         edx,dword ptr [ebp-554h]  
+00351D39  vinsertps   xmm1,xmm1,dword ptr [ecx+edx*4+18h],20h  
+00351D41  mov         eax,dword ptr [ebp-548h]  
+00351D47  mov         ecx,dword ptr [ebp-54Ch]  
+00351D4D  vinsertps   xmm1,xmm1,dword ptr [eax+ecx*4+1Ch],30h  
+00351D55  vinsertf128 ymm0,ymm0,xmm1,1  
+00351D5B  vmovups     ymmword ptr [ebp-400h],ymm0  
+00351D63  vmovups     ymm0,ymmword ptr [ebp-400h]  
+00351D6B  vmovups     ymmword ptr [ebp-100h],ymm0  
+						__m256 result = _mm256_mul_ps(tmp8, kj);
+00351D73  vmovups     ymm0,ymmword ptr [ebp-0C0h]  
+00351D7B  vmulps      ymm0,ymm0,ymmword ptr [ebp-80h]  
+00351D80  vmovups     ymmword ptr [ebp-440h],ymm0  
+00351D88  vmovups     ymm0,ymmword ptr [ebp-440h]  
+00351D90  vmovups     ymmword ptr [ebp-140h],ymm0  
+
+						result = _mm256_sub_ps(ij, result);
+00351D98  vmovups     ymm0,ymmword ptr [ebp-100h]  
+00351DA0  vsubps      ymm0,ymm0,ymmword ptr [ebp-140h]  
+00351DA8  vmovups     ymmword ptr [ebp-480h],ymm0  
+00351DB0  vmovups     ymm0,ymmword ptr [ebp-480h]  
+00351DB8  vmovups     ymmword ptr [ebp-140h],ymm0  
+						//print256_num(kj);
+						//print256_num(ij);
+						_mm256_store_ps(&matrix_intr[i][j], result);
+00351DC0  vmovups     ymm0,ymmword ptr [ebp-140h]  
+00351DC8  imul        eax,dword ptr [i],2EE4h  
+00351DCF  add         eax,dword ptr [matrix_intr]  
+00351DD2  mov         ecx,dword ptr [j]  
+00351DD5  vmovups     ymmword ptr [eax+ecx*4],ymm0  
+						j += increment;
+00351DDA  mov         eax,dword ptr [j]  
+00351DDD  add         eax,dword ptr [increment]  
+00351DE0  mov         dword ptr [j],eax  
+					}
+				}
+00351DE3  jmp         gauss_jordan_elimination+4B6h (0351E06h)  
+				else { // i == k, skip calculation, but increment j
+					if ((j + increment) > N) j++;
+00351DE5  mov         eax,dword ptr [j]  
+00351DE8  add         eax,dword ptr [increment]  
+00351DEB  cmp         eax,0BB8h  
+00351DF0  jle         gauss_jordan_elimination+4ADh (0351DFDh)  
+00351DF2  mov         eax,dword ptr [j]  
+00351DF5  add         eax,1  
+00351DF8  mov         dword ptr [j],eax  
+00351DFB  jmp         gauss_jordan_elimination+4B6h (0351E06h)  

@@ -10,12 +10,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <immintrin.h>
+
 #define N       3000		// Groesse der N*N Matrix
 #define DEBUG	false		// um Matrizen anzeigen zu lassen
-
-#define OPENMP	false			// toggle openMP parallelisation
-#define THREADS 8				// number of threads for openMP
-
 #define EPSILON 1e-20
 #define FALSE   0
 #define TRUE    1
@@ -31,9 +29,9 @@ void initialize_system(p_mrow_t matrix) {
 	srand(0);
 	for (i = 0; i < N; i++) {
 		for (j = 0; j <= N; j++) {
-			if (j == N)
+			if (j==N)
 				matrix[i][j] = rand() * (rand() % 100) + 1;
-			else
+			else 
 				matrix[i][j] = rand();
 		}
 	}
@@ -68,6 +66,7 @@ int gauss_jordan_elimination(p_mrow_t m)
 	startrow = 0;
 	lastrow = N;
 	nrow = N;
+	int increment = 8;
 
 	//dynamische Speicherallokierung
 	//Pivotrow: Reihe um naechste Reduzierung der Matrix durchzufuehren
@@ -109,12 +108,25 @@ int gauss_jordan_elimination(p_mrow_t m)
 		}
 
 		//Reduziere alle Reihen mit der Pivotreihe
-		//#pragma omp parallel for private(j, k) num_threads(THREADS) if (OPENMP)
 		for (j = 0; j < nrow; j++) {
 			if (!(marked[j] && pivotp[j] == i)) {
 				tmp = m[j][i] / pivotrow[i];
-				for (k = i; k < N + 1; k++)
-					m[j][k] -= pivotrow[k] * tmp;
+				for (k = i; k < N + 1; k++) {
+					if ((k + increment) > (N + 1)) {
+						m[j][k] -= pivotrow[k] * tmp;
+						k++;
+					}
+					else {
+						__m256 jk = _mm256_setr_ps(m[j][k], m[j][k + 1], m[j][k + 2], m[j][k + 3], m[j][k + 4], m[j][k + 5], m[j][k + 6], m[j][k + 7]);
+						__m256 tmp8 = _mm256_setr_ps(tmp, tmp, tmp, tmp, tmp, tmp, tmp, tmp);
+						__m256 pivotrow8 = _mm256_setr_ps(pivotrow[k], pivotrow[k + 1], pivotrow[k + 2], pivotrow[k + 3], pivotrow[k + 4], pivotrow[k + 5], pivotrow[k + 6], pivotrow[k + 7]);
+						__m256 result = _mm256_mul_ps(tmp8, pivotrow8);
+
+						result = _mm256_sub_ps(jk, result);
+						_mm256_store_ps(&m[j][k], result);
+						k += increment;
+					}
+				}
 			}
 		}
 		if (DEBUG) printf("Durchlauf: %d\n", i);
@@ -126,13 +138,13 @@ int gauss_jordan_elimination(p_mrow_t m)
 	//	printf("%d, ", pivotp[i]);
 	//}
 	//printf("\n");
-
+	
 
 	//Loesungsvektor sortieren - Einheitsmatrix erstellen
-	for (i = 0; i < N; i++) {
-		m[i][N] /= m[i][pivotp[i]];
-		m[i][pivotp[i]] = 1.0;
-		resultsvector[i] = m[i][N];
+	for (i = 0; i < N; i++) {         
+			m[i][N] /= m[i][pivotp[i]];
+			m[i][pivotp[i]] = 1.0;
+			resultsvector[i] = m[i][N];
 	}
 
 	// diagonal anordnen
