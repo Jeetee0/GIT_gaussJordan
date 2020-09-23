@@ -15,7 +15,7 @@
 #define FALSE   0
 #define TRUE    1
 
-typedef double mrow_t[N+1];     //wird benutzt um automatisch Pointer anzulegen 
+typedef float mrow_t[N+1];     //wird benutzt um automatisch Pointer anzulegen 
 typedef mrow_t* p_mrow_t;       //2-dimensionales Arry
 
 //Funktion zu Generierung und Intitalisierung einer Matrix mit Zufallswerten
@@ -53,10 +53,10 @@ void print_results (p_mrow_t matrix)
 int gauss_jordan_elimination (p_mrow_t m)
 {
     int startrow, lastrow, nrow;        
-    double *pivotrow;
+    float *pivotrow;
     int *pivotp, *marked;
     int i, j, k, picked;
-    double  tmp;
+    float tmp;
     
   
 /* rows of matrix I have to process */
@@ -66,7 +66,7 @@ int gauss_jordan_elimination (p_mrow_t m)
 
 //dynamische Speicherallocierung
 //Pivotrow: Reihe um naechste Reduzierung der Matrix durchzufuehren
-    pivotrow = (double *) malloc ((N+1) * sizeof (double));
+    pivotrow = (float *) malloc ((N+1) * sizeof (float));
 //pivotp: Speichert welche Spalte mit der Pivotreihe reduziert wurde
     pivotp = (int *) malloc (N * sizeof (int));
 //marked: Speicher welche Reihe fuer die Reduzierung benutzt wurde
